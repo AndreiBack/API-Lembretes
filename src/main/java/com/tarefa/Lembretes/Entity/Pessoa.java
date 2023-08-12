@@ -1,5 +1,6 @@
 package com.tarefa.Lembretes.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,9 @@ public class Pessoa {
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
+    @JoinColumn(name = "idLembrete")
+    @JsonManagedReference
     private List<Lembrete> lembretes;
 
     public Pessoa() {
@@ -28,5 +31,10 @@ public class Pessoa {
     public Pessoa(String nome, List<Lembrete> lembretes) {
         this.nome = nome;
         this.lembretes = lembretes;
+    }
+
+    public Pessoa(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
     }
 }

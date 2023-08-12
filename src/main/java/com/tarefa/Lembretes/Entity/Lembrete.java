@@ -1,5 +1,6 @@
 package com.tarefa.Lembretes.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,14 +18,19 @@ public class Lembrete {
     private String recado;
 
     @ManyToOne
-    @JoinColumn(name = "pessoa_id", nullable = false)
+    @JoinColumn(name = "pessoa_fk", nullable = false)
+    @JsonBackReference
     private Pessoa pessoa;
 
     public Lembrete() {
     }
 
-    public Lembrete(String recado, Pessoa pessoa) {
+    public Lembrete(Long id, String recado, Pessoa pessoa) {
+        this.id = id;
         this.recado = recado;
         this.pessoa = pessoa;
     }
+
+
 }
+
