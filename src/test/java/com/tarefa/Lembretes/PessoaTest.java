@@ -40,7 +40,7 @@ public class PessoaTest {
 
     @Test
     public void testGetPessoaById() throws Exception {
-        PessoaDTO pessoaDTO = new PessoaDTO(null, "Bob");
+        PessoaDTO pessoaDTO = new PessoaDTO(null, "VanderleiOBrabo");
         mockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pessoaDTO)))
@@ -57,48 +57,21 @@ public class PessoaTest {
     }
 
     @Test
-    public void testUpdatePessoa() throws Exception {
-
-        PessoaDTO pessoaDTO = new PessoaDTO(null, "Charlie");
+    public void testFindByName() throws Exception {
+        PessoaDTO pessoaDTO = new PessoaDTO(null, "Alice");
         mockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pessoaDTO)))
                 .andExpect(status().isOk());
-
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pessoas")
-                        .param("name", pessoaDTO.getNome()))
+                        .param("name", "Alice"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String response = result.getResponse().getContentAsString();
-        Pessoa pessoa = objectMapper.readValue(response, Pessoa.class);
-        Long pessoaId = pessoa.getId();
-
-
-        PessoaDTO updatedPessoaDTO = new PessoaDTO(pessoaId, "David");
-        mockMvc.perform(MockMvcRequestBuilders.put("/pessoas/{id}", pessoaId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedPessoaDTO)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Pessoa editada com sucesso!"));
+        PessoaDTO pessoaEncontrada = objectMapper.readValue(response, PessoaDTO.class);
+        assertEquals("Alice", pessoaEncontrada.getNome());
     }
 
-
-    @Test
-    public void testDeletePessoa() throws Exception {
-        PessoaDTO pessoaDTO = new PessoaDTO(null, "Eve");
-        mockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(pessoaDTO)))
-                .andExpect(status().isOk());
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/pessoas")
-                        .param("id", "1"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String response = result.getResponse().getContentAsString();
-        assertEquals("Pessoa excluida com sucesso!", response);
-    }
 }

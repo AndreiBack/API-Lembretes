@@ -40,14 +40,14 @@ public class LembreteTest {
 
     @Test
     public void testCreateLembrete() throws Exception {
-        PessoaDTO pessoaDTO = new PessoaDTO(null, "Alice");
+        PessoaDTO pessoaDTO = new PessoaDTO(null, "Cleitin");
         mockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pessoaDTO)))
                 .andExpect(status().isOk());
 
 
-        assertNotNull(pessoaService.findByName("Alice"));
+        assertNotNull(pessoaService.findByName("Cleitin"));
 
         LembreteDTO lembreteDTO = new LembreteDTO(null, "Lembrete de teste", pessoaDTO);
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/lembretes")
