@@ -2,6 +2,7 @@ package com.tarefa.Lembretes.Service;
 
 import com.tarefa.Lembretes.DTO.LembreteDTO;
 import com.tarefa.Lembretes.Entity.Lembrete;
+import com.tarefa.Lembretes.Entity.Pessoa;
 import com.tarefa.Lembretes.Repository.LembreteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,13 @@ public class LembreteService {
 
     @Transactional(rollbackFor = Exception.class)
     public void create(LembreteDTO lembreteDTO) {
-        Assert.isTrue(!lembreteDTO.getRecado().isBlank(), "Mensagem não pode ser nula!");
         Assert.notNull(lembreteDTO.getPessoa(), "Lembrete deve ser vinculado a uma pessoa!");
+        Assert.notNull(lembreteDTO.getRecado(), "O campo 'recado' não pode ser nulo!");
 
-        lembreteRepository.save(this.toLembrete(lembreteDTO));
+        // Verifique se a pessoa associada ao lembrete existe
+        Pessoa pessoa = pessoaService.findById(lembreteDTO.getPessoa().getId());
+
+        lembreteRepository.save(toLembrete(lembreteDTO));
     }
 
     @Transactional(rollbackFor = Exception.class)
