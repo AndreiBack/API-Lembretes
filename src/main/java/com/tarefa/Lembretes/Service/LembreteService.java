@@ -36,7 +36,6 @@ public class LembreteService {
         Assert.notNull(lembreteDTO.getPessoa(), "Lembrete deve ser vinculado a uma pessoa!");
         Assert.notNull(lembreteDTO.getRecado(), "O campo 'recado' não pode ser nulo!");
 
-        // Verifique se a pessoa associada ao lembrete existe
         Pessoa pessoa = pessoaService.findById(lembreteDTO.getPessoa().getId());
 
         lembreteRepository.save(toLembrete(lembreteDTO));
